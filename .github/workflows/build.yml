@@ -35,16 +35,9 @@ jobs:
       - name: Build app with pyinstaller
         run: pyinstaller meshery.spec
 
-      - name: Upload Windows artifact
-        if: ${{ startsWith(matrix.os, 'win') }}
-        uses: actions/upload-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: meshery_windows
+          name: meshery-${{ matrix.os }}
           path: dist/**
 
-      - name: Upload MacOS artifact
-        if: ${{ startsWith(matrix.os, 'macos') }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: meshery_macos
-          path: dist/**
