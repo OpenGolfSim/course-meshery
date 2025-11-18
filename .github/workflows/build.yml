@@ -37,13 +37,19 @@ jobs:
       - name: Build app with pyinstaller
         run: pyinstaller meshery.spec
 
-      - name: Upload artifact
+      - name: Upload Windows artifact
+        if: ${{ startsWith(matrix.os, 'win') }}
         uses: actions/upload-artifact@v4
         with:
-          name: meshery-${{ github.ref_name }}-${{ matrix.os }}
-          path: |
-            dist/**/*.app
-            dist/**/*.exe
+          name: meshery-${{ github.ref_name }}-windows
+          path: dist/**/*.exe
+      
+      - name: Upload MacOS artifact
+        if: ${{ startsWith(matrix.os, 'macos') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: meshery-${{ github.ref_name }}-macos
+          path: dist/**/*.app
 
       # - name: Upload Windows artifact
       #   if: ${{ startsWith(matrix.os, 'win') }}
@@ -69,9 +75,25 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          path: ./release-assets
+          name: meshery-${{ github.ref_name }}-macos
+          path: ./release-assets/macos
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: meshery-${{ github.ref_name }}-windows
+          path: ./release-assets/windows
+
+      - name: Re-zip macos
+        run: |
+          cd release-assets/macos
+          zip -r ../meshery-${{ github.ref_name }}-macos.zip .
+      
+      - name: Re-zip windows
+        run: |
+          cd release-assets/windows
+          zip -r ../meshery-${{ github.ref_name }}-windows.zip .
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          files: release-assets/**/*
+          files: release-assets/**/*.zip
