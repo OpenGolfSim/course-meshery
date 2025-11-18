@@ -1,21 +1,44 @@
 Meshery is a tool that generates base course meshes from an SVG file and raw height map.
 
+<img src="images/Meshery.iconset/icon_128x128@2x.png" width="128" height="128" />
+
+
+
 ## Getting Started
 
 1. Download and install the latest release for windows or mac from the releases page.
 
-### Prepping your files
+<img src="images/screenshot.png" width="600" />
+
+
+### Prepping the Required Files
+
+Meshery requires a few key files to create your meshes. 
 
 #### SVG File
 
 SVG files are usually automatically during the [Course Terrain Tool](https://help.opengolfsim.com/tools/course-terrain-tool/) steps of the course building process. However, you can also create SVGs from scratch for test or fantasy courses.
 
-- Your SVG file should contain a layer group with an `id` of `course`. All course elements like fairway, bunker, green shapes should be placed within that group. All other groups/layers in the SVG will be ignored. This is useful for stashing guide layers or satellite or hillside images.
-- The vector shapes should be color coded to surfaces (fairway, bunker, etc.) using the official OGS color pallette.
+##### Course Layer
+Your SVG file should contain a layer/group with an `id` of `course`. All course elements like fairway, bunker, green shapes should be placed within that group. All other groups/layers in the SVG will be ignored. This is useful for stashing guide layers or satellite or hillside images in other layers.
+
+If you have issues with Meshery detecting your course shapes, verify the `id` of your course layer by selecting **Edit** > **XML Editor...** in Inkscape and verify you have a group element with the `id` set to `course`. (e.g. `<g id="course">`)
+
+##### Color Palette
+
+The vector shapes should be color coded to surfaces (fairway, bunker, etc.) using the official OGS [color pallette](blob/main/data/palette.gpl).
+
+##### Paths & Shapes
+
 - Shapes need to be fully closed paths (no lines or objects). Make sure you convert any lines to closed path shapes.
+
 - Try and avoid sharp corners, or overlapping holes. 
 
-#### Unity Raw Heightmap Export
+Simply save the SVG file in Inkscape (making sure it checks the above checklist). There's no need to remove or hide any layers.
+
+#### Unity Raw Terrain Export
+
+Raw terrain height data is used to conform the generated meshes to the slope of your course terrain. Each time you make changes to the underlying terrain data (e.g. digging out bunkers or smoothing greens), you'll need to re-export that terrain data and re-run the meshery process.
 
 - In the inspector, under your terrain's Settings tab, select **Export Raw**
   - Depth: **Bit 16**
