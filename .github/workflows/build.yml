@@ -15,7 +15,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
     
-    env:
+    # env:
       # GH_TOKEN: ${{ secrets.github_token }}
     
     steps:
