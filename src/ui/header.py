@@ -31,7 +31,7 @@ class UIHeader(QWidget):
     title_label.setStyleSheet("font-size: 16px;font-weight: bold;")
     title_label.setAlignment(Qt.AlignVCenter)
 
-    subtitle_label = QLabel("SVG to mesh converter - v1.0.3")
+    subtitle_label = QLabel("SVG to mesh converter - v1.0")
     subtitle_label.setStyleSheet("font-size: 11px;")
     subtitle_label.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
 
