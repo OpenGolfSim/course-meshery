@@ -10,15 +10,12 @@ jobs:
 
   build:
     name: Building App
-    # if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-    
-    # env:
-      # GH_TOKEN: ${{ secrets.github_token }}
+  
     
     steps:
       - name: Check out repository
@@ -28,8 +25,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.13.9'
-          # python-version: '3.10'
-        # if: ${{ startsWith(matrix.os, 'win') }}
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -41,57 +36,41 @@ jobs:
         if: ${{ startsWith(matrix.os, 'win') }}
         uses: actions/upload-artifact@v4
         with:
-          name: meshery-${{ github.ref_name }}-windows
+          name: meshery-windows
           path: dist/**/*.exe
       
       - name: Upload MacOS artifact
         if: ${{ startsWith(matrix.os, 'macos') }}
         uses: actions/upload-artifact@v4
         with:
-          name: meshery-${{ github.ref_name }}-macos
+          name: meshery-macos
           path: dist/**/*.app
 
-      # - name: Upload Windows artifact
-      #   if: ${{ startsWith(matrix.os, 'win') }}
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: meshery_${{ matrix.os }}
-      #     path: dist/**
-
-      # - name: Upload MacOS artifact
-      #   if: ${{ startsWith(matrix.os, 'macos') }}
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: meshery_macos
-      #     path: dist/**.app
-  
   release:
     needs: build
     name: Release App
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-    # if: startsWith(github.ref, 'refs/tags/')  # Only for tags
-    # if: github.ref_type == 'tag'
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: meshery-${{ github.ref_name }}-macos
+          name: meshery-macos
           path: ./release-assets/macos
 
       - uses: actions/download-artifact@v4
         with:
-          name: meshery-${{ github.ref_name }}-windows
+          name: meshery-windows
           path: ./release-assets/windows
 
       - name: Re-zip macos
         run: |
           cd release-assets/macos
-          zip -r ../meshery-${{ github.ref_name }}-macos.zip .
+          zip -r ../meshery-macos.zip .
       
       - name: Re-zip windows
         run: |
           cd release-assets/windows
-          zip -r ../meshery-${{ github.ref_name }}-windows.zip .
+          zip -r ../meshery-windows.zip .
 
       - name: Create release
         uses: softprops/action-gh-release@v2
