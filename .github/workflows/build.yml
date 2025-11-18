@@ -7,7 +7,7 @@ on:
 jobs:
 
   build:
-    name: Building Release
+    name: Building App
     # if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ${{ matrix.os }}
 
@@ -40,7 +40,8 @@ jobs:
         with:
           name: meshery-${{ matrix.os }}
           path: |
-            dist/**/*.{exe,app}
+            dist/**/*.app
+            dist/**/*.exe
 
       # - name: Upload Windows artifact
       #   if: ${{ startsWith(matrix.os, 'win') }}
@@ -58,6 +59,7 @@ jobs:
   
   release:
     needs: build
+    name: Release App
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     # if: startsWith(github.ref, 'refs/tags/')  # Only for tags
@@ -71,4 +73,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/**.zip
+            artifacts/**/*.zip
