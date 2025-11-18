@@ -75,4 +75,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/**/*.zip
+            artifacts/meshery-*/meshery-*.zip
