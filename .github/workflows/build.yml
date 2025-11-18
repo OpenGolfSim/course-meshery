@@ -39,7 +39,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: meshery-${{ matrix.os }}
-          path: dist/**
+          path: |
+            dist/**/*.{exe,app}
 
       # - name: Upload Windows artifact
       #   if: ${{ startsWith(matrix.os, 'win') }}
@@ -55,20 +56,19 @@ jobs:
       #     name: meshery_macos
       #     path: dist/**.app
   
-  # release:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   if: startsWith(github.ref, 'refs/tags/')  # Only for tags
-  #   steps:
-  #     - uses: actions/download-artifact@v4
-  #       with:
-  #         path: artifacts
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    # if: startsWith(github.ref, 'refs/tags/')  # Only for tags
+    # if: github.ref_type == 'tag'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
-  #     - name: Create release
-  #       uses: softprops/action-gh-release@v2
-  #       if: github.ref_type == 'tag'
-  #       with:
-  #         files: |
-  #           meshery_macos.zip
-  #           meshery_windows.zip
-  
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/**.zip
