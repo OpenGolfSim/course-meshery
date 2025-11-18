@@ -66,10 +66,17 @@ Then install the required dependencies:
 ./venv/bin/pip install -r requirements.txt
 ```
 
+#### Building Distributable Apps
 
+We use `pyinstaller` to create app bundles and exe files for windows and macos.
 
+To build:
 
-#### Creating App Icons
+```bash
+pyinstaller meshery.spec
+```
+
+#### App Icons
 
 Here's how I created the app icons. First add all the files you need to the iconset folder:
 
@@ -87,17 +94,13 @@ Meshery.iconset/icon_512x512.png
 Meshery.iconset/icon_512x512@2x.png
 ```
 
-## MacOS
-
 MacOS has a built-in utility called `iconutil` to create `.icns` files:
 
 ```bash
 iconutil -c icns images/Meshery.iconset -o images/Meshery.icns
 ```
 
-## Windows
-
-To create the windows icon file, you'll need to install the [Imagemagick](https://imagemagick.org/) command-line tool.
+To create the windows `ICO` file, you'll need to install the [Imagemagick](https://imagemagick.org/) command-line tool. Take a 256x256 transparent PNG and use it as the input for this command:
 
 ```bash
 magick images/Meshery.iconset/icon_256x256.png -define icon:auto-resize=16,24,32,48,64,256 images/meshery.ico
